@@ -6,7 +6,9 @@ const ejsLayout=require('express-ejs-layouts')
 const sassMiddleware=require('node-sass-middleware')
 
 
-
+app.use(ejsLayout)
+app.set('layout extractStyles',true)
+app.set('layout extractScripts',true)
 
 app.use(sassMiddleware({
     src:'./assets/sass',
@@ -22,11 +24,10 @@ app.use(sassMiddleware({
 app.use(express.static('assets'))
 app.use('/',require('./routes'))
 
-app.use(ejsLayout)
+
 app.set('view engine','ejs')
 app.set('views','./views')
-app.set('layout extractStyles',true)
-app.set('layout extractScripts',true)
+
 
 const Port=process.env.PORT||8000
 app.listen(Port,function(err){
