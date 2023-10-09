@@ -4,5 +4,6 @@ const cartController=require('../controllers/cartController')
 
 router.get('/',cartController.cart)
 router.post('/update',cartController.update)
+router.get('/update',cartController.update)
 
 module.exports=router;

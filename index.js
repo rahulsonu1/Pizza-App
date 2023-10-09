@@ -1,18 +1,23 @@
 const express=require('express')
 const app=express()
+const path=require('path')
 const db=require('./config/mongoose')
 const ejs=require('ejs')
 const ejsLayout=require('express-ejs-layouts')
 const sassMiddleware=require('node-sass-middleware')
 const session=require('express-session')
 require('dotenv').config()
+const parser=require('cookie-parser')
 const MongoStore=require('connect-mongo')
 const flash=require('express-flash')
+const notifier = require('node-notifier');
 
-
+app.use(express.urlencoded())
 app.use(ejsLayout)
 app.set('layout extractStyles',true)
 app.set('layout extractScripts',true)
+app.use(parser())
+app.use(express.json())
 
 app.use(sassMiddleware({
     src:'./assets/sass',
@@ -43,6 +48,10 @@ app.use(session({
         autoRemove:'disabled'
     })
 }))
+app.use((req,res,next)=>{
+    res.locals.session=req.session
+    next()
+})
 
 
 app.use('/',require('./routes'))
