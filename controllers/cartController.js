@@ -1,5 +1,6 @@
 module.exports.cart=function(req,res){
     return res.render('cart',{title:"cart"})
+<<<<<<< HEAD
 }
 
 module.exports.update=function(req,res){
@@ -34,4 +35,6 @@ module.exports.update=function(req,res){
         
       return res.json({totalQty:cart.totalQty})
 
+=======
+>>>>>>> parent of 07118ec (fetching data to server)
 }

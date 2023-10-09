@@ -1,5 +1,5 @@
-const Menu=require('../models/menu')
 
+<<<<<<< HEAD
 
 module.exports.Home= async function(req,res){
     try {
@@ -8,4 +8,8 @@ module.exports.Home= async function(req,res){
     } catch (error) {
         
     }
+=======
+module.exports.Home=function(req,res){
+    return res.render('home',{title:"home"})
+>>>>>>> parent of 07118ec (fetching data to server)
 }

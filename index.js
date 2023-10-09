@@ -5,12 +5,15 @@ const db=require('./config/mongoose')
 const ejs=require('ejs')
 const ejsLayout=require('express-ejs-layouts')
 const sassMiddleware=require('node-sass-middleware')
+<<<<<<< HEAD
 const session=require('express-session')
 require('dotenv').config()
 const parser=require('cookie-parser')
 const MongoStore=require('connect-mongo')
 const flash=require('express-flash')
 const notifier = require('node-notifier');
+=======
+>>>>>>> parent of 07118ec (fetching data to server)
 
 app.use(express.urlencoded())
 app.use(ejsLayout)
@@ -22,7 +25,7 @@ app.use(express.json())
 app.use(sassMiddleware({
     src:'./assets/sass',
     dest:'./assets/css',
-    debug:false,
+    debug:true,
     outputStyle:'expanded',
     prefix:'/css'
 
@@ -30,9 +33,8 @@ app.use(sassMiddleware({
 
 
 
-app.set('view engine','ejs')
-app.set('views','./views')
 app.use(express.static('assets'))
+<<<<<<< HEAD
 app.use(flash())
 
 app.use(session({
@@ -54,10 +56,13 @@ app.use((req,res,next)=>{
 })
 
 
+=======
+>>>>>>> parent of 07118ec (fetching data to server)
 app.use('/',require('./routes'))
 
 
-
+app.set('view engine','ejs')
+app.set('views','./views')
 
 
 const Port=process.env.PORT||8000
