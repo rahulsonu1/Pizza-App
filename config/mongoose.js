@@ -1,6 +1,6 @@
 const mongoose=require('mongoose')
 
-mongoose.connect('mongodb://localhost:27017/RealTimePizza')
+mongoose.connect('mongodb://localhost:27017/Pizza')
 
 const db=mongoose.connection
 
