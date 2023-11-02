@@ -6,15 +6,17 @@ const db=require('./config/mongoose')
 const ejs=require('ejs')
 const ejsLayout=require('express-ejs-layouts')
 const sassMiddleware=require('node-sass-middleware')
-const passport=require('passport')
-const LocalStrategy=require('./config/passport_Local')
-
-
 const parser=require('cookie-parser')
 const session=require('express-session')
 const MongoStore=require('connect-mongo')
+const passport=require('passport')
+const LocalStrategy=require('./config/passportLocal')
 
 
+
+app.set('view engine','ejs')
+app.set('views','./views')
+app.use(express.static('assets'))
 app.use(express.urlencoded())
 app.use(ejsLayout)
 app.set('layout extractStyles',true)
@@ -31,11 +33,6 @@ app.use(sassMiddleware({
 
 }))
 
-
-
-app.use(express.static('assets'))
-
-
 app.use(session({
     name:"pizza",
     secret:process.env.Cookie_secret,
@@ -48,19 +45,21 @@ app.use(session({
     })
 }))
 
+
+
+
 app.use((req,res,next)=>{
     res.locals.session=req.session
     res.locals.user=req.user
     next()
 })
-
 app.use(passport.initialize())
 app.use(passport.session())
 app.use(passport.setAuthenticatedUser)
-app.set('view engine','ejs')
-app.set('views','./views')
 
 app.use('/',require('./routes'))
+
+
 
 
 
