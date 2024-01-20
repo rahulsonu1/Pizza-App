@@ -11,6 +11,8 @@ const session=require('express-session')
 const MongoStore=require('connect-mongo')
 const passport=require('passport')
 const LocalStrategy=require('./config/passportLocal')
+const flash=require('connect-flash')
+const customMiddleware=require('./config/middleware')
 
 
 
@@ -56,6 +58,8 @@ app.use((req,res,next)=>{
 app.use(passport.initialize())
 app.use(passport.session())
 app.use(passport.setAuthenticatedUser)
+app.use(flash())
+app.use(customMiddleware.setFlash)
 
 app.use('/',require('./routes'))
 
@@ -64,7 +68,9 @@ app.use('/',require('./routes'))
 
 
 const Port=process.env.PORT||8000
-app.listen(Port,function(err){
+const server=app.listen(Port,function(err){
     if(err){console.log("error in listening")}
     console.log(`Server is running at port ${Port}`)
 })
+
+

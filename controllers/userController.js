@@ -1,4 +1,6 @@
 const User=require('../model/user')
+const Order=require('../model/order')
+const moment=require('moment')
 
 module.exports.register=function(req,res){
     if(req.isAuthenticated()){
@@ -32,8 +34,13 @@ module.exports.create= async function(req,res){
 }
 
 module.exports.createSession = function (req, res) {
-    if (req.isAuthenticated()) {
-        return res.redirect('/home');
+    if (req.isAuthenticated() && req.user.role==='customer') {
+        req.flash('success',"Logged in successfully as customer")
+        return res.redirect('/user/orders');
+    }
+    else if(req.isAuthenticated() && req.user.role==='admin'){
+        req.flash('success',"Logged in successfully as admin")
+        return res.redirect('/admin/order')
     }
     return res.redirect('/user/login');
 };
@@ -43,4 +50,19 @@ module.exports.destroySession=function(req,res){
         if (err) { return next(err); }
         return res.redirect('/home');
       });
+}
+
+
+module.exports.orderList=async function(req,res){
+    try {
+        const order=await Order.find({customerId:req.user.id},null,{
+            sort:{'createdAt':-1}
+        })
+        return res.render('order',{title:"orderList",
+        order,moment
+        })
+        
+    } catch (error) {
+        console.log(error)
+    }
 }

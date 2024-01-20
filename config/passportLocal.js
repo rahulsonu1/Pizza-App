@@ -33,7 +33,7 @@ passport.checkAuthentication=function(req,res,next){
   if(req.isAuthenticated()){
     return next();
   }
-  return res.redirect('/users/sign-in')
+  return res.redirect('/user/login')
 }
 
 passport.setAuthenticatedUser=function(req,res,next){
@@ -42,6 +42,15 @@ passport.setAuthenticatedUser=function(req,res,next){
   }
   next()
 }
+
+passport.checkAdmin=function(req,res,next){
+  if(req.isAuthenticated() && req.user.role==='admin'){
+    return next();
+  }
+  return res.redirect('/home')
+}
+
+
 
 
 module.exports=passport
