@@ -13,7 +13,12 @@ module.exports.Store=async function(req,res){
         phone,
         address,
     })
-    Order.create(order)
+    
+    await Order.create(order)
+    
+    const eventEmitter=req.app.get('eventEmitter')
+        eventEmitter.emit('orderPlaced',order)
+
     req.flash('success',"Order placed!")
     return res.redirect('/home')
     

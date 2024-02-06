@@ -1,9 +1,4 @@
 
-
-
-
-
-
 let addToCart=document.querySelectorAll('.add-to-cart')
 let cartCounter=document.querySelector('#cart-counter')
 
@@ -100,18 +95,11 @@ function admin(){
         `
         }).join('')
     }
-    // Socket
-    // socket.on('orderPlaced', (order) => {
-    //     new Noty({
-    //         type: 'success',
-    //         timeout: 1000,
-    //         text: 'New order!',
-    //         progressBar: false,
-    //     }).show();
-    //     orders.unshift(order)
-    //     orderTableBody.innerHTML = ''
-    //     orderTableBody.innerHTML = generateMarkup(orders)
-    // })
+    socket.on('orderPlaced',(order)=>{
+        orders.unshift(order)
+        orderTableBody.innerHTML=''
+        orderTableBody.innerHTML=generateMarkup(order)
+    })
 }
 
 admin();
@@ -147,6 +135,22 @@ function updateStatus(order){
 
 updateStatus(order)
 
+let socket=io()
+if(order){
+    socket.emit('join',`order_${order._id}`)
+}
+let adminAreaPath=window.location.pathname
+if(adminAreaPath.includes('admin')){
+    socket.emit('join','adminRoom')
+}
+
+socket.on('orderUpdated',(data)=>{
+    const updatedOrder={...order}
+    updatedOrder.updatedAt=moment().format
+    updateOrder.status=data.status
+    updateStatus(updatedOrder)
+    
+})
 
 
 
@@ -163,46 +167,3 @@ updateStatus(order)
 
 
 
-// let addToCart=document.querySelectorAll(".add-to-cart")
-
-// let cartCounter=document.querySelector("#cart-counter")
-
-// function updateCart(pizza){
-//    $.ajax({
-//     url:"/cart/update",
-//     method:'post',
-//     data:pizza,
-//     success:function(data){
-//         // console.log(data)
-//     },
-//     error:function(error){
-//         console.log(error.responseText)
-//     }
-//    })
-// }
-
-// function getRequest(){
-//     $.ajax({
-//         url:'/cart/update',
-//         method:'get',
-//         success: function(data) {
-//             cartCounter.innerText=data.totalQty
-//         },
-//         error: function(error) {
-//             console.error('Error retrieving total quantity:', error);
-//         }
-//     })
-// }
-
-
-
-
-
-// addToCart.forEach((btn)=>{
-//     btn.addEventListener('click',function(e){
-//         let pizza=JSON.parse(btn.dataset.pizza)
-//         updateCart(pizza)
-//         getRequest()
-        
-//     })
-// })

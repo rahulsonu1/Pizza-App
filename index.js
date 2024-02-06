@@ -13,6 +13,11 @@ const passport=require('passport')
 const LocalStrategy=require('./config/passportLocal')
 const flash=require('connect-flash')
 const customMiddleware=require('./config/middleware')
+const emitter=require('events')
+const eventEmitter=new emitter()
+app.set('eventEmitter',eventEmitter)
+
+// 
 
 
 
@@ -37,7 +42,7 @@ app.use(sassMiddleware({
 
 app.use(session({
     name:"pizza",
-    secret:process.env.Cookie_secret,
+    secret:process.env.cookieSecret,
     saveUninitialized:false,
     resave:false,
     cookie:{maxAge:1000*60*500},
@@ -73,4 +78,18 @@ const server=app.listen(Port,function(err){
     console.log(`Server is running at port ${Port}`)
 })
 
+const io=require('socket.io')(server)
+io.on('connection',(socket)=>{
+    socket.on('join',(orderId)=>{
+        
+        socket.join(orderId)
+    })
+})
 
+eventEmitter.on('orderUpdated',(data)=>{
+    io.to(`order_${data.id}`).emit('order updated',data)
+})
+
+eventEmitter.on('orderPlaced',(data)=>{
+    io.to('adminRoom').emit('orderPlaced',data)
+})
