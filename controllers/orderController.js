@@ -20,7 +20,7 @@ module.exports.Store=async function(req,res){
         eventEmitter.emit('orderPlaced',order)
 
     req.flash('success',"Order placed!")
-    return res.redirect('/home')
+    return res.redirect('/')
     
    } catch (error) {
     console.log(error)
@@ -35,7 +35,7 @@ module.exports.OrderShow= async function(req,res){
         if(req.user.id.toString()===order.customerId.toString()){
           return res.render('singleOrder',{order,title:"orderStatus"})
         }
-          return res.redirect('/home')
+          return res.redirect('/')
     } catch (error) {
         
     }
