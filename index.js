@@ -1,4 +1,5 @@
 require('dotenv').config()
+
 const express=require('express')
 const app=express()
 const path=require('path')
@@ -17,13 +18,11 @@ const emitter=require('events')
 const eventEmitter=new emitter()
 app.set('eventEmitter',eventEmitter)
 
-// 
-
 
 
 app.set('view engine','ejs')
 app.set('views','./views')
-app.use(express.static('assets'))
+app.use(express.static('./assets'))
 app.use(express.urlencoded())
 app.use(ejsLayout)
 app.set('layout extractStyles',true)
@@ -31,14 +30,9 @@ app.set('layout extractScripts',true)
 app.use(parser())
 app.use(express.json())
 
-app.use(sassMiddleware({
-    src:'./assets/sass',
-    dest:'./assets/css',
-    debug:false,
-    outputStyle:'expanded',
-    prefix:'/css'
 
-}))
+
+
 
 app.use(session({
     name:"pizza",
@@ -47,7 +41,7 @@ app.use(session({
     resave:false,
     cookie:{maxAge:1000*60*500},
     store:MongoStore.create({
-        mongoUrl: 'mongodb://localhost/Pizza',
+        mongoUrl: process.env.mongodbURL,
         autoRemove:'disabled'
     })
 }))
@@ -67,12 +61,15 @@ app.use(flash())
 app.use(customMiddleware.setFlash)
 
 app.use('/',require('./routes'))
+app.use((req,res)=>{
+    res.status(404).send('<h1>Not found 404</h1>')
+})
 
 
 
 
 
-const Port=process.env.PORT||8000
+const Port=process.env.PORT
 const server=app.listen(Port,function(err){
     if(err){console.log("error in listening")}
     console.log(`Server is running at port ${Port}`)

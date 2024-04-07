@@ -1,6 +1,6 @@
 const mongoose=require('mongoose')
 
-mongoose.connect('mongodb://localhost:27017/Pizza')
+mongoose.connect(process.env.mongodbURL)
 
 const db=mongoose.connection
 
