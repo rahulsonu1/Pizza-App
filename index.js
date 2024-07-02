@@ -9,6 +9,8 @@ const ejsLayout=require('express-ejs-layouts')
 const sassMiddleware=require('node-sass-middleware')
 const parser=require('cookie-parser')
 const session=require('express-session')
+const bodyParser = require('body-parser');
+
 const MongoStore=require('connect-mongo')
 const passport=require('passport')
 const LocalStrategy=require('./config/passportLocal')
@@ -23,7 +25,9 @@ app.set('eventEmitter',eventEmitter)
 app.set('view engine','ejs')
 app.set('views','./views')
 app.use(express.static('./assets'))
-// app.use(express.urlencoded())
+app.use(bodyParser.urlencoded({ extended: true })); // Set the 'extended' option to true or false
+app.use(bodyParser.json());
+
 app.use(ejsLayout)
 app.set('layout extractStyles',true)
 app.set('layout extractScripts',true)
