@@ -11,6 +11,7 @@ const parser=require('cookie-parser')
 const session=require('express-session')
 const bodyParser = require('body-parser');
 
+
 const MongoStore=require('connect-mongo')
 const passport=require('passport')
 const LocalStrategy=require('./config/passportLocal')
@@ -82,14 +83,22 @@ const server=app.listen(Port,function(err){
 const io=require('socket.io')(server)
 io.on('connection',(socket)=>{
     socket.on('join',(orderId)=>{
-        
+        console.log(orderId)
         socket.join(orderId)
     })
 })
 
-eventEmitter.on('orderUpdated',(data)=>{
-    io.to(`order_${data.id}`).emit('order updated',data)
-})
+// eventEmitter.on('orderUpdated',(data)=>{
+//     console.log(data)
+//     io.to(`order_${data.id}`).emit('orderUpdated',data)
+// })
+
+
+eventEmitter.on('orderUpdated', (data) => {
+    
+    io.to(`order_${data.id}`).emit('orderUpdated', data); 
+});
+
 
 eventEmitter.on('orderPlaced',(data)=>{
     io.to('adminRoom').emit('orderPlaced',data)

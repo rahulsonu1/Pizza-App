@@ -47,7 +47,7 @@ passport.checkAdmin=function(req,res,next){
   if(req.isAuthenticated() && req.user.role==='admin'){
     return next();
   }
-  return res.redirect('/home')
+  return res.redirect('/')
 }
 
 
